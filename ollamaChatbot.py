@@ -8,6 +8,7 @@ from typing_extensions import TypedDict, Annotated
 from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
 
+
 llm = ChatOllama(
     model="llama3.2:3b",
     temperature=0.8,
