@@ -62,7 +62,7 @@ class State(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
     field: str
 
-def memory_chatbot():
+def memory_chatbot(field, query, thread_id):
     #Define a new graph
     #Trim messages
     trimmer = trim_messages(
@@ -100,25 +100,24 @@ def memory_chatbot():
 
     #Run the app
     
-    field = input("Enter the field of your query: ")
-    while True:
         #Run the app with the query
         
-        query = input("Enter your query: ")
-        if query.lower() == "exit":
-            break
-        # response = app.invoke({"messages": [HumanMessage(query)], "field": field}, {"configurable": {"thread_id": "thread-1"}})
-        # response["messages"][-1].pretty_print() #output the last message in a pretty format
+    query = query
+        
+    response = app.invoke({"messages": [HumanMessage(query)], "field": field}, {"configurable": {"thread_id": thread_id}})
+    response["messages"][-1].pretty_print() #output the last message in a pretty format
+
+    return response["messages"][-1].content
 
         #for streaming response
-        for chunk, metadata in app.stream(
-            {"messages": [HumanMessage(query)], "field": field},
-            {"configurable": {"thread_id": "thread-1"}}, stream_mode="messages"
-        ):
-            if isinstance(chunk, AIMessage): #Filter to AI responses
-                print(chunk.content, end="-")
+        # for chunk, metadata in app.stream(
+        #     {"messages": [HumanMessage(query)], "field": field},
+        #     {"configurable": {"thread_id": "thread-1"}}, stream_mode="messages"
+        # ):
+        #     if isinstance(chunk, AIMessage): #Filter to AI responses
+        #         print(chunk.content, end="-")
         
-memory_chatbot()
+#memory_chatbot()
 #basic_chatbot()
 #print(llm.invoke(basic_prompt_template()))
 #basic_test()
